@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Validation</title>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <form id="myForm">
+    <div>
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required>
+      <span id="firstNameError" class="error"></span>
+    </div>
+    <div>
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required>
+      <span id="lastNameError" class="error"></span>
+    </div>
+    <div>
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="text" id="phoneNumber" name="phoneNumber" required>
+      <span id="phoneNumberError" class="error"></span>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <span id="emailError" class="error"></span>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <span id="passwordError" class="error"></span>
+    </div>
+    <div>
+      <input type="checkbox" id="terms" name="terms">
+      <label for="terms">I agree to the given Terms and Conditions.</label>
+      <span id="termsError" class="error"></span>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Clear all error messages
+      clearErrors();
+
+      // Validate form inputs
+      var firstName = document.getElementById('firstName').value;
+      var lastName = document.getElementById('lastName').value;
+      var phoneNumber = document.getElementById('phoneNumber').value;
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      var terms = document.getElementById('terms').checked;
+
+      var isValid = true;
+
+      if (firstName === '') {
+        showError('firstNameError', 'Name cannot be empty');
+        isValid = false;
+      }
+
+      if (lastName === '') {
+        showError('lastNameError', 'Name cannot be empty');
+        isValid = false;
+      }
+
+      if (!isValidPhoneNumber(phoneNumber)) {
+        showError('phoneNumberError', 'Please enter a valid phone number');
+        isValid = false;
+      }
+
+      if (!isValidEmail(email)) {
+        showError('emailError', 'Please enter a valid email address');
+        isValid = false;
+      }
+
+      if (!isValidPassword(password)) {
+        showError('passwordError', 'Please enter a valid password');
+        isValid = false;
+      }
+
+      if (!terms) {
+        showError('termsError', 'Please agree to the Terms and Conditions');
+        isValid = false;
+      }
+
+      if (isValid) {
+        console.log('Form submitted successfully');
+        alert('Form submitted successfully');
+        // You can submit the form to the server here if needed
+      }
+    });
+
+    function showError(elementId, errorMessage) {
+      var errorElement = document.getElementById(elementId);
+      errorElement.textContent = errorMessage;
+    }
+
+    function clearErrors() {
+      var errorElements = document.getElementsByClassName('error');
+      for (var i = 0; i < errorElements.length; i++) {
+        errorElements[i].textContent = '';
+      }
+    }
+
+    function isValidPhoneNumber(phoneNumber) {
+      // Validate phone number format (10 digits)
+      var phoneNumberPattern = /^\d{10}$/;
+      return phoneNumberPattern.test(phoneNumber);
+    }
+
+    function isValidEmail(email) {
+      // Validate email format using a regular expression
+      var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(email);
+    }
+
+    function isValidPassword(password) {
+      // Validate password format (at least 8 characters, one uppercase, one numeric)
+      var passwordPattern = /^(?=.*\d)(?=.*[A-Z]).{8,}$/;
+      return passwordPattern.test(password);
+    }
+  </script>
+</body>
+</html>
